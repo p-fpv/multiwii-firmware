@@ -1151,10 +1151,25 @@ void mixTable() {
     motor[2] = PIDMIX(+1, 0,+1); //LEFT
     motor[3] = PIDMIX( 0,-1,-1); //FRONT
   #elif defined( QUADX )
-    motor[0] = PIDMIX(-1,+1,-1); //REAR_R
-    motor[1] = PIDMIX(-1,-1,+1); //FRONT_R
-    motor[2] = PIDMIX(+1,+1,+1); //REAR_L
-    motor[3] = PIDMIX(+1,-1,-1); //FRONT_L
+    #ifndef motorsREV
+      motor[0] = PIDMIX(-1,+1,-1); //REAR_R
+      motor[1] = PIDMIX(-1,-1,+1); //FRONT_R
+      motor[2] = PIDMIX(+1,+1,+1); //REAR_L
+      motor[3] = PIDMIX(+1,-1,-1); //FRONT_L
+      #ifdef motormap11on5 //Modification // pin 5 copy motor output pin 11 (I use for setting all esc together in BLHeliSuite Arduino4w-if)
+      //motor[4] = PIDMIX(+1 ,+1 ,+1); //REAR_L //pin 6
+        motor[5] = PIDMIX(+1 ,+1 ,+1); //REAR_L 
+      #endif
+    #else  //Motor direction is reversed //https://www.iforce2d.net/mixercalc/#
+      motor[0] = PIDMIX(+1,+1,-1); //REAR_R
+      motor[1] = PIDMIX(+1,-1,+1); //FRONT_R
+      motor[2] = PIDMIX(-1,+1,+1); //REAR_L
+      motor[3] = PIDMIX(-1,-1,-1); //FRONT_L
+      #ifdef motormap11on5 //Modification // pin 5 copy motor output pin 11 (I use for setting all esc together in BLHeliSuite Arduino4w-if)
+      //motor[4] = PIDMIX(+1 ,+1 ,+1); //REAR_L //pin 6
+        motor[5] = PIDMIX(-1,+1,+1); //REAR_L 
+      #endif
+    #endif
   #elif defined( Y4 )
     motor[0] = PIDMIX(+0,+1,-1);   //REAR_1 CW
     motor[1] = PIDMIX(-1,-1, 0); //FRONT_R CCW
@@ -1564,13 +1579,23 @@ void mixTable() {
     for(i=0; i< NUMBER_MOTOR; i++) {
       if (maxMotor > MAXTHROTTLE) // this is a way to still have good gyro corrections if at least one motor reaches its max.
         motor[i] -= maxMotor - MAXTHROTTLE;
-      motor[i] = constrain(motor[i], conf.minthrottle, MAXTHROTTLE);
-      if ((rcData[THROTTLE] < MINCHECK) && !f.BARO_MODE)
-      #ifndef MOTOR_STOP
-        motor[i] = conf.minthrottle;
+
+      #ifdef LOW_THR_CONTROL  //Modification
+          #ifndef MOTOR_STOP
+            motor[i] = constrain(motor[i], conf.minthrottle, MAXTHROTTLE);
+          #else
+            motor[i] = constrain(motor[i], MINCOMMAND, MAXTHROTTLE);
+          #endif
       #else
-        motor[i] = MINCOMMAND;
+        motor[i] = constrain(motor[i], conf.minthrottle, MAXTHROTTLE);
+        if ((rcData[THROTTLE] < MINCHECK) && !f.BARO_MODE)
+          #ifndef MOTOR_STOP
+            motor[i] = conf.minthrottle;
+          #else
+            motor[i] = MINCOMMAND;
+          #endif
       #endif
+
       if (!f.ARMED)
         motor[i] = MINCOMMAND;
     }

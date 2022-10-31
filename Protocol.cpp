@@ -184,6 +184,7 @@ void serialCom() {
   uint32_t timeMax; // limit max time in this function in case of GPS
 
   timeMax = micros();
+  static uint32_t GPS_last_frame_seen; //Last gps frame seen at this time, used to detect stalled gps communication //Modification
   for(port=0;port<UART_NUMBER;port++) {
     CURRENTPORT=port;
     #define RX_COND
@@ -233,11 +234,14 @@ void serialCom() {
           }
         }
         c_state[port] = state;
+        
+        #endif // SUPPRESS_ALL_SERIAL_MSP
 
+        
         // SERIAL: try to detect a new nav frame based on the current received buffer
         #if defined(GPS_SERIAL)
         if (GPS_SERIAL == port) {
-          static uint32_t GPS_last_frame_seen; //Last gps frame seen at this time, used to detect stalled gps communication
+          //static uint32_t GPS_last_frame_seen; //Last gps frame seen at this time, used to detect stalled gps communication //Modification
           if (GPS_newFrame(c)) {
             //We had a valid GPS data frame, so signal task scheduler to switch to compute
             if (GPS_update == 1) GPS_update = 0; else GPS_update = 1; //Blink GPS update
@@ -245,18 +249,27 @@ void serialCom() {
             GPS_Frame = 1;
           }
   
-          // Check for stalled GPS, if no frames seen for 1.2sec then consider it LOST
-          if ((timeMax - GPS_last_frame_seen) > 1200000) {
-            //No update since 1200ms clear fix...
-            f.GPS_FIX = 0;
-            GPS_numSat = 0;
-          }
+//          // Check for stalled GPS, if no frames seen for 1.2sec then consider it LOST //Modification
+//          if ((timeMax - GPS_last_frame_seen) > 1200000) {
+//            //No update since 1200ms clear fix...
+//            f.GPS_FIX = 0;
+//            GPS_numSat = 0;
+//          }
         }
         if (micros()-timeMax>250) return;  // Limit the maximum execution time of serial decoding to avoid time spike
         #endif
-      #endif // SUPPRESS_ALL_SERIAL_MSP
+      
     } // while
+     #ifdef GPS_SERIAL
+  // Check for stalled GPS, if no frames seen for 1.2sec then consider it LOST //Modification
+  if ((timeMax - GPS_last_frame_seen) > 2000000) {
+            //No update since 2000ms clear fix...
+            f.GPS_FIX = 0;
+            GPS_numSat = 0;
+          }
+  #endif
   } // for
+ 
 }
 
 void evaluateCommand(uint8_t c) {

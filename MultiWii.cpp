@@ -25,7 +25,6 @@ March  2015     V2.4
 #include "Serial.h"
 #include "GPS.h"
 #include "Protocol.h"
-#include "Telemetry.h"
 
 #include <avr/pgmspace.h>
 
@@ -203,7 +202,7 @@ flags_struct_t f;
     uint16_t wattsMax = 0;
   #endif
 #endif
-#if defined(LOG_VALUES) || defined(LCD_TELEMETRY) || defined(ARMEDTIMEWARNING) || defined(LOG_PERMANENT) || defined (TELEMETRY)
+#if defined(LOG_VALUES) || defined(LCD_TELEMETRY) || defined(ARMEDTIMEWARNING) || defined(LOG_PERMANENT)
   uint32_t armedTime = 0;
 #endif
 
@@ -406,8 +405,12 @@ void annexCode() { // this code is excetuted at each loop and won't interfere wi
     }
     if (rcData[axis]<MIDRC) rcCommand[axis] = -rcCommand[axis];
   }
-  tmp = constrain(rcData[THROTTLE],MINCHECK,2000);
-  tmp = (uint32_t)(tmp-MINCHECK)*2559/(2000-MINCHECK); // [MINCHECK;2000] -> [0;2559]
+  #ifdef LOW_THR_CONTROL //Modification
+    tmp = (uint32_t)(constrain(rcData[THROTTLE],MINCOMMAND,2000)-MINCOMMAND)*2559/(2000-MINCOMMAND); // [MINCHECK;2000] -> [0;2559]
+  #else
+    tmp = (uint32_t)(constrain(rcData[THROTTLE],MINCHECK,2000)-MINCHECK)*2559/(2000-MINCHECK); // [MINCHECK;2000] -> [0;2559]
+  #endif
+  
   tmp2 = tmp/256; // range [0;9]
   rcCommand[THROTTLE] = lookupThrottleRC[tmp2] + (tmp-tmp2*256) * (lookupThrottleRC[tmp2+1]-lookupThrottleRC[tmp2]) / 256; // [0;2559] -> expo -> [conf.minthrottle;MAXTHROTTLE]
   #if defined(HEADFREE)
@@ -589,10 +592,6 @@ void annexCode() { // this code is excetuted at each loop and won't interfere wi
     }
   #endif
 
-  #ifdef TELEMETRY
-     run_telemetry();
-  #endif
-
   #if GPS & defined(GPS_LED_INDICATOR)       // modified by MIS to use STABLEPIN LED for number of sattelites indication
     static uint32_t GPSLEDTime;              // - No GPS FIX -> LED blink at speed of incoming GPS frames
     static uint8_t blcnt;                    // - Fix and sat no. bellow 5 -> LED off
@@ -613,7 +612,7 @@ void annexCode() { // this code is excetuted at each loop and won't interfere wi
     if (cycleTime < cycleTimeMin) cycleTimeMin = cycleTime; // remember lowscore
   #endif
   if (f.ARMED)  {
-    #if defined(LCD_TELEMETRY) || defined(ARMEDTIMEWARNING) || defined(LOG_PERMANENT) || defined (TELEMETRY)
+    #if defined(LCD_TELEMETRY) || defined(ARMEDTIMEWARNING) || defined(LOG_PERMANENT)
       armedTime += (uint32_t)cycleTime;
     #endif
     #if defined(VBAT)
@@ -728,9 +727,6 @@ void setup() {
   #ifdef LCD_CONF_DEBUG
     configurationLoop();
   #endif
-  #ifdef TELEMETRY
-    init_telemetry();
-  #endif
   #ifdef LANDING_LIGHTS_DDR
     init_landing_lights();
   #endif
@@ -760,6 +756,7 @@ void setup() {
 }
 
 void go_arm() {
+
   if(calibratingG == 0
   #if defined(ONLYARMWHENFLAT)
     && f.ACC_CALIBRATED 
@@ -768,7 +765,7 @@ void go_arm() {
     && failsafeCnt < 2
   #endif
   #if GPS && defined(ONLY_ALLOW_ARM_WITH_GPS_3DFIX)
-    && (f.GPS_FIX && GPS_numSat >= 5)
+    && (f.GPS_FIX && GPS_numSat >= GPS_numSatARM)  
   #endif
     ) {
     if(!f.ARMED && !f.BARO_MODE) { // arm now!
@@ -867,15 +864,38 @@ void loop () {
   #endif
     rcTime = currentTime + 20000;
     computeRC();
+    
     // Failsafe routine - added by MIS
     #if defined(FAILSAFE)
       if ( failsafeCnt > (5*FAILSAFE_DELAY) && f.ARMED) {                  // Stabilize, and set Throttle to specified level
         for(i=0; i<3; i++) rcData[i] = MIDRC;                               // after specified guard time after RC signal is lost (in 0.1sec)
         rcData[THROTTLE] = conf.failsafe_throttle;
-        if (failsafeCnt > 5*(FAILSAFE_DELAY+FAILSAFE_OFF_DELAY)) {          // Turn OFF motors after specified Time (in 0.1sec)
-          go_disarm();     // This will prevent the copter to automatically rearm if failsafe shuts it down and prevents
-          f.OK_TO_ARM = 0; // to restart accidentely by just reconnect to the tx - you will have to switch off first to rearm
+
+        #if GPS && defined(FS_RTH)
+        if (f.GPS_FIX && GPS_numSat > 5){ //Modification 
+            if (f.GPS_mode != GPS_MODE_RTH){
+              mission_step.parameter1 = 1;    // auto landing after RTH
+              // if RTH activated reset other GPS modes to avoid restart RTH on switch of other modes
+              rcOptions[BOXGPSHOLD] = 0;
+              rcOptions[BOXLAND] = 0;
+              rcOptions[BOXGPSNAV] = 0;
+              rcOptions[BOXGPSHOME] = 0; 
+              init_RTH();
+              }
+        }else{
+          rcOptions[BOXGPSHOME] = 0;
+          if (failsafeCnt > 5*(FAILSAFE_DELAY+FAILSAFE_OFF_DELAY)) {          // Turn OFF motors after specified Time (in 0.1sec)
+            go_disarm();     // This will prevent the copter to automatically rearm if failsafe shuts it down and prevents
+            f.OK_TO_ARM = 0; // to restart accidentely by just reconnect to the tx - you will have to switch off first to rearm
+          }
         }
+        
+        #else
+          if (failsafeCnt > 5*(FAILSAFE_DELAY+FAILSAFE_OFF_DELAY)) {          // Turn OFF motors after specified Time (in 0.1sec)
+            go_disarm();     // This will prevent the copter to automatically rearm if failsafe shuts it down and prevents
+            f.OK_TO_ARM = 0; // to restart accidentely by just reconnect to the tx - you will have to switch off first to rearm
+          }
+        #endif
         failsafeEvents++;
       }
       if ( failsafeCnt > (5*FAILSAFE_DELAY) && !f.ARMED) {  //Turn of "Ok To arm to prevent the motors from spinning after repowering the RX with low throttle and aux to arm
@@ -911,9 +931,17 @@ void loop () {
         errorAngleI[ROLL] = 0; errorAngleI[PITCH] = 0;
       #endif
       if (conf.activate[BOXARM] > 0) {             // Arming/Disarming via ARM BOX
-        if ( rcOptions[BOXARM] && f.OK_TO_ARM ) go_arm(); else if (f.ARMED) go_disarm();
-      }
-    }
+        if ( rcOptions[BOXARM] && f.OK_TO_ARM ) go_arm(); 
+          #ifndef DISARM_without_THR //Modification
+            else if (f.ARMED) go_disarm();
+          #endif
+      }}
+      
+    #ifdef DISARM_without_THR   //disarm without low throttle //Modification
+      if (conf.activate[BOXARM] > 0) {             
+        if ( !rcOptions[BOXARM] && f.ARMED) go_disarm();}
+    #endif
+   
     if(rcDelayCommand == 20) {
       if(f.ARMED) {                   // actions during armed
         #ifdef ALLOW_ARM_DISARM_VIA_TX_YAW
@@ -1150,12 +1178,23 @@ void loop () {
     if (f.ARMED ) {                       //Check GPS status and armed
       //TODO: implement f.GPS_Trusted flag, idea from Dramida - Check for degraded HDOP and sudden speed jumps
       if (f.GPS_FIX) {
-        if (GPS_numSat >5 ) {
+        if (GPS_numSat > 5 ) { 
+          
+          #if defined(AP_MODE) //Modification 
+            if (f.GPS_mode == GPS_MODE_HOLD && (abs(rcCommand[ROLL]) > AP_MODE || abs(rcCommand[PITCH]) > AP_MODE))
+              GPS_set_next_wp(&GPS_coord[LAT], &GPS_coord[LON],&GPS_coord[LAT], & GPS_coord[LON]); // Move HoldPos
+          #endif           
+        
           if (prv_gps_modes != gps_modes_check) {                           //Check for change since last loop
-            NAV_error = NAV_ERROR_NONE;
+            NAV_error = NAV_ERROR_NONE;            
             if (rcOptions[BOXGPSHOME]) {                                    // RTH has the priotity over everything else
+              mission_step.parameter1 = rcOptions[BOXLAND];    //Modification // IF BOXLAND activated then make auto landing after RTH
+              // if RTH activated reset other GPS modes to avoid restart RTH on switch of other modes
+              rcOptions[BOXGPSHOLD] = 0;
+              rcOptions[BOXLAND] = 0;
+              rcOptions[BOXGPSNAV] = 0; 
               init_RTH();
-            } else if (rcOptions[BOXGPSHOLD]) {                             //Position hold has priority over mission execution  //But has less priority than RTH
+            } else if (rcOptions[BOXGPSHOLD]) {      //Position hold has priority over mission execution  //But has less priority than RTH           
               if (f.GPS_mode == GPS_MODE_NAV)
                 NAV_paused_at = mission_step.number;
               f.GPS_mode = GPS_MODE_HOLD;
@@ -1211,8 +1250,9 @@ void loop () {
           }
           nav[0] = 0; nav[1] = 0;
         }
-      } else { //f.GPS_FIX
+      } else { 
         // GPS Fix dissapeared, very unlikely that we will be able to regain it, abort mission
+        f.GPS_BARO_MODE = false; //Modification
         f.GPS_mode = GPS_MODE_NONE;
         NAV_state = NAV_STATE_NONE;
         NAV_paused_at = 0;
@@ -1351,9 +1391,9 @@ void loop () {
     if ( (abs(rcCommand[THROTTLE]-initialThrottleHold)>ALT_HOLD_THROTTLE_NEUTRAL_ZONE) && !f.THROTTLE_IGNORED) {
       // Slowly increase/decrease AltHold proportional to stick movement ( +100 throttle gives ~ +50 cm in 1 second with cycle time about 3-4ms)
       AltHoldCorr+= rcCommand[THROTTLE] - initialThrottleHold;
-      if(abs(AltHoldCorr) > 512) {
-        AltHold += AltHoldCorr/512;
-        AltHoldCorr %= 512;
+      if(abs(AltHoldCorr) > 512) {   //
+        AltHold += AltHoldCorr/512;  // 
+        AltHoldCorr %= 512;          //
       }
       isAltHoldChanged = 1;
     } else if (isAltHoldChanged) {

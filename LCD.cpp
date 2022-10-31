@@ -281,6 +281,11 @@ void i2c_OLED_send_byte(uint8_t val) {
 void  i2c_OLED_init(void){
   i2c_OLED_send_cmd(0xae);    //display off
   i2c_OLED_send_cmd(0xa4);          //SET All pixels OFF
+
+  //Modification
+  i2c_OLED_send_cmd(0x8D); //fix 
+  i2c_OLED_send_cmd(0x14); //fix
+  
 //  i2c_OLED_send_cmd(0xa5);            //SET ALL pixels ON
   delay(50);
   i2c_OLED_send_cmd(0x20);            //Set Memory Addressing Mode

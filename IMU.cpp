@@ -348,7 +348,7 @@ uint8_t getEstimatedAltitude(){
     //D
     alt.vario = vel;
     applyDeadband(alt.vario, 5);
-    BaroPID -= constrain(conf.pid[PIDALT].D8 * alt.vario >>4, -150, 150);
+    BaroPID -= constrain(conf.pid[PIDALT].D8 * alt.vario >>4, -150, 150); 
   #endif
   return 1;
 }
