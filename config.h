@@ -36,7 +36,7 @@
     //#define BI
     //#define TRI
     //#define QUADP
-    #define QUADX
+    //#define QUADX
     //#define Y4
     //#define Y6
     //#define HEX6
@@ -168,7 +168,7 @@
       //#define ITG3200
       //#define MPU3050
       //#define L3G4200D
-      #define MPU6050       //combo + ACC
+      //#define MPU6050       //combo + ACC
       //#define LSM330        //combo + ACC
 
       /* I2C accelerometer */
@@ -182,12 +182,12 @@
       //#define MMA8451Q
 
       /* I2C barometer */
-      #define BMP085 //compatible BMP180
+      //#define BMP085 //compatible BMP180
       //#define MS561101BA
 
       /* I2C magnetometer */
       //#define HMC5843
-      #define HMC5883
+      //#define HMC5883
       //#define QMC5883 //Modification //synersignart
       //#define AK8975
       //#define MAG3110
@@ -1014,7 +1014,7 @@ Also note, that maqgnetic declination changes with time, so recheck your value e
     // for 328p proc
     //#define EXT_MOTOR_32KHZ
     //#define EXT_MOTOR_4KHZ
-//    #define EXT_MOTOR_1KHZ
+    //#define EXT_MOTOR_1KHZ
 
     // for 32u4 proc
     //#define EXT_MOTOR_64KHZ
