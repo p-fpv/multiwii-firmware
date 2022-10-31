@@ -21,6 +21,10 @@ https://github.com/multiwii/multiwii-firmware
 Схема 2:[Гугл диск](https://drive.google.com/file/d/1oj_qtzbZ4pDPDSm9rZUpJZpI_0x48zMV/view?usp=sharing)  
 Схема 3:[Гугл диск](https://drive.google.com/file/d/1BLuNCajbMPzegtK8vbNYMheQCvbtSR_r/view?usp=sharing)  
 
+YouTube:
+https://www.youtube.com/watch?v=mX8ljljpYV0
+
+
 ## Добавлено в прошивку:  
 ap_mode - не надо щёлкать gps hold, чтобы поменять точку удержания.
 
