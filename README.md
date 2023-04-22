@@ -1,7 +1,7 @@
 # multiwii-firmware
 Последний мой мод multiwii. 
 
-Для прошивки лучше всего брать из архива [MultiWii 2.4 MOD.zip](https://github.com/p-fpv/multiwii-firmware/blob/upstream_shared/MW/MultiWii%202.4%20MOD.zip)  
+Прошивку лучше всего брать из архива [MultiWii 2.4 MOD.zip](https://github.com/p-fpv/multiwii-firmware/blob/upstream_shared/MW/MultiWii%202.4%20MOD.zip) 
 
 Только мод прошивка: [Гугл диск](https://drive.google.com/file/d/17jfpCTy4ixYAZFBwaKcJDYWvWd92Ipt0/view?usp=sharing)  
 Только конфигуратор(нужна джава): [Гугл диск](https://drive.google.com/file/d/1jbhSE-_RR2zxRSAbHpM4CgAFXoieWKLG/view)   
