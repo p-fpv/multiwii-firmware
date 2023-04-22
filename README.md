@@ -1,8 +1,14 @@
 # multiwii-firmware
-Последний мой мод multiwii.  
-Всё вместе: [github](https://github.com/p-fpv/multiwii-firmware/tree/upstream_shared/MW), [Гугл диск](https://drive.google.com/file/d/1GlJO6Vu7A0HQmhkHXaApKbCzUglgRTow/view?usp=sharing)  
+Последний мой мод multiwii. 
+
+Только мод прошивка: [Гугл диск](https://drive.google.com/file/d/17jfpCTy4ixYAZFBwaKcJDYWvWd92Ipt0/view?usp=sharing)  
+Только конфигуратор(нужна джава): [Гугл диск](https://drive.google.com/file/d/1jbhSE-_RR2zxRSAbHpM4CgAFXoieWKLG/view)   
+Только конфигуратор(джава встроена): [Гугл диск](https://drive.google.com/file/d/1mB_lhXBDC7ZyMOtupeILERtVu3wTjpcT/view)
+
+Почти всё вместе: [github](https://github.com/p-fpv/multiwii-firmware/tree/upstream_shared/MW), [Гугл диск](https://drive.google.com/file/d/1GlJO6Vu7A0HQmhkHXaApKbCzUglgRTow/view?usp=sharing)  
 MultiWii 2.4 MOD  
 MultiWiiConf 2.4  
+MultiWiiConf со встроенной java только тут [Гугл диск](https://drive.google.com/file/d/1mB_lhXBDC7ZyMOtupeILERtVu3wTjpcT/view)     
 I2C_GPS_NAV_v2_2 fix  
 MWOSD R1.6 mod(вход в меню как в inav,betaflight)  
 WinGUI_2.3pre10b71
