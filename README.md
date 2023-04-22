@@ -9,6 +9,8 @@ WinGUI_2.3pre10b71
 
 Только мод прошивка: [Гугл диск](https://drive.google.com/file/d/17jfpCTy4ixYAZFBwaKcJDYWvWd92Ipt0/view?usp=sharing)  
 Только конфигуратор(нужна джава): [Гугл диск](https://drive.google.com/file/d/1jbhSE-_RR2zxRSAbHpM4CgAFXoieWKLG/view)
+Только конфигуратор(джава встроена): [Гугл диск](https://drive.google.com/file/d/1mB_lhXBDC7ZyMOtupeILERtVu3wTjpcT/view)
+
 
 Последняя прошивка multiwii mod, которая летала: [Гугл диск](https://drive.google.com/file/d/1JH-_mKMphsRR4L9IaIQ-quKSuu7EBwS5/view)  
 
