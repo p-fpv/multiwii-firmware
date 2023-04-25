@@ -1,6 +1,8 @@
 # multiwii-firmware
 Последний мой мод multiwii. 
 
+Строку [uint8_t bytes[0];](https://github.com/p-fpv/multiwii-firmware/blob/upstream_shared/GPS.cpp#L1178) в GPS.cpp возможно стоит поменять на uint8_t bytes[128];, тоже самое сделать и в I2C_GPS_NAV
+
 Прошивку лучше всего брать из архива [MultiWii 2.4 MOD.zip](https://github.com/p-fpv/multiwii-firmware/blob/upstream_shared/MW/MultiWii%202.4%20MOD.zip) 
 
 Только мод прошивка: [Гугл диск](https://drive.google.com/file/d/17jfpCTy4ixYAZFBwaKcJDYWvWd92Ipt0/view?usp=sharing)  
