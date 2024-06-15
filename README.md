@@ -1,5 +1,5 @@
 # multiwii-firmware
-Последний мой мод multiwii. 
+Последний мой мод multiwii. Прошивка проверялась в Arduino IDE 1.8.X  
 
 Строку [uint8_t bytes[0];](https://github.com/p-fpv/multiwii-firmware/blob/upstream_shared/GPS.cpp#L1178) в GPS.cpp возможно стоит поменять на uint8_t bytes[128];, тоже самое сделать и в I2C_GPS_NAV
 
@@ -72,3 +72,4 @@ https://web.archive.org/web/20160424230158/http://www.multiwii.com/wiki/index.ph
 https://web.archive.org/web/20191229102216/http://www.multiwii.com/wiki/index.php?title=Flightmodes  
 https://www.magnetic-declination.com/ магнитное склонение   
 http://www.multiwii.com/forum/viewtopic.php?t=3578 TPA  
+https://github.com/stronnag/mwptools Программа для навигации по точкам  
