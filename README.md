@@ -5,14 +5,12 @@
 
 Прошивку лучше всего брать из архива [MultiWii 2.4 MOD.zip](https://github.com/p-fpv/multiwii-firmware/blob/upstream_shared/MW/MultiWii%202.4%20MOD.zip) 
 
-Только мод прошивка: [Гугл диск](https://drive.google.com/file/d/17jfpCTy4ixYAZFBwaKcJDYWvWd92Ipt0/view?usp=sharing)  
-Только конфигуратор(нужна джава): [Гугл диск](https://drive.google.com/file/d/1jbhSE-_RR2zxRSAbHpM4CgAFXoieWKLG/view)   
-Только конфигуратор(джава встроена): [Гугл диск](https://drive.google.com/file/d/1mB_lhXBDC7ZyMOtupeILERtVu3wTjpcT/view)
+Только конфигуратор(джава встроена): [Гугл диск](https://drive.google.com/file/d/1ho8gX15F3FWW8vIUQ6SNyDcp8RSuVusb/view)
 
-Почти всё вместе: [github](https://github.com/p-fpv/multiwii-firmware/tree/upstream_shared/MW), [Гугл диск](https://drive.google.com/file/d/1GlJO6Vu7A0HQmhkHXaApKbCzUglgRTow/view?usp=sharing)  
+Почти всё вместе: [github](https://github.com/p-fpv/multiwii-firmware/tree/upstream_shared/MW):    
 MultiWii 2.4 MOD  
 MultiWiiConf 2.4  
-MultiWiiConf со встроенной java только тут [Гугл диск](https://drive.google.com/file/d/1mB_lhXBDC7ZyMOtupeILERtVu3wTjpcT/view)     
+MultiWiiConf со встроенной java только тут [Гугл диск](https://drive.google.com/file/d/1ho8gX15F3FWW8vIUQ6SNyDcp8RSuVusb/view)     
 I2C_GPS_NAV_v2_2 fix  
 MWOSD R1.6 mod(вход в меню как в inav,betaflight)  
 WinGUI_2.3pre10b71
@@ -24,9 +22,6 @@ https://github.com/multiwii/multiwii-firmware
 Оригинал i2c-gps-nav (не компилируется в новых arduino ide): [Гугл](https://code.google.com/archive/p/i2c-gps-nav/downloads)
 
 Схемы: [github](https://github.com/p-fpv/multiwii-firmware/tree/upstream_shared/MW/)  
-Схема 1:[Гугл диск](https://drive.google.com/file/d/17C_0z1Cdw0nRtGb8KEJgoP1HGSZGw0Us/view?usp=sharing) Собирать по этой схеме, с остальным мои полномочия всё.  
-Схема 2:[Гугл диск](https://drive.google.com/file/d/1oj_qtzbZ4pDPDSm9rZUpJZpI_0x48zMV/view?usp=sharing)  
-Схема 3:[Гугл диск](https://drive.google.com/file/d/1BLuNCajbMPzegtK8vbNYMheQCvbtSR_r/view?usp=sharing)  
 
 YouTube:
 https://www.youtube.com/watch?v=mX8ljljpYV0
