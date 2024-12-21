@@ -1,21 +1,16 @@
 # multiwii-firmware
 Последний мой мод multiwii. Прошивка проверялась в Arduino IDE 1.8.X  
 
-Строку [uint8_t bytes[0];](https://github.com/p-fpv/multiwii-firmware/blob/upstream_shared/GPS.cpp#L1178) в GPS.cpp возможно стоит поменять на uint8_t bytes[128];, тоже самое сделать и в I2C_GPS_NAV
+Прошивку лучше всего брать из архива [MultiWii 2.4 MOD.zip](https://github.com/p-fpv/multiwii-firmware/releases/tag/mw2.4)  
+Конфигуратор(джава встроена): [MultiWiiConf.2.4.zip.with.embedded.java.zip](https://github.com/p-fpv/multiwii-firmware/releases/tag/mw2.4)
 
-Прошивку лучше всего брать из архива [MultiWii 2.4 MOD.zip](https://github.com/p-fpv/multiwii-firmware/blob/upstream_shared/MW/MultiWii%202.4%20MOD.zip) 
-
-Только конфигуратор(джава встроена): [Гугл диск](https://drive.google.com/file/d/1ho8gX15F3FWW8vIUQ6SNyDcp8RSuVusb/view)
-
-Почти всё вместе: [github](https://github.com/p-fpv/multiwii-firmware/tree/upstream_shared/MW):    
+Почти всё вместе в папке MW: [github](https://github.com/p-fpv/multiwii-firmware/tree/upstream_shared/MW):    
 MultiWii 2.4 MOD  
 MultiWiiConf 2.4  
-MultiWiiConf со встроенной java только тут [Гугл диск](https://drive.google.com/file/d/1ho8gX15F3FWW8vIUQ6SNyDcp8RSuVusb/view)     
+MultiWiiConf со встроенной java только тут [MultiWiiConf.2.4.zip.with.embedded.java.zip](https://github.com/p-fpv/multiwii-firmware/releases/tag/mw2.4)     
 I2C_GPS_NAV_v2_2 fix  
 MWOSD R1.6 mod(вход в меню как в inav,betaflight)  
 WinGUI_2.3pre10b71
-
-Последняя прошивка multiwii mod, которая летала: [Гугл диск](https://drive.google.com/file/d/1JH-_mKMphsRR4L9IaIQ-quKSuu7EBwS5/view)  
 
 Оригинал прошивки:
 https://github.com/multiwii/multiwii-firmware  
@@ -55,6 +50,8 @@ motormap11on5 (микс)- Пин 5 повторяет выход мотора н
 Поддержка QMC5883, вроде работает.
 
 GPS_numSatARM, минимальное количество спутников для запуска, не ставить меньше 5.
+
+Строку [uint8_t bytes[0];](https://github.com/p-fpv/multiwii-firmware/blob/upstream_shared/GPS.cpp#L1178) в GPS.cpp возможно стоит поменять на uint8_t bytes[128];, тоже самое сделать и в I2C_GPS_NAV
 
 ## Полезные ссылки(без веб архива,  сайт может не работать)
 https://web.archive.org/web/20160404165509/http://www.multiwii.com/wiki/index.php?title=Config.h в самом низу про кастомную ориентацию платы.  
